@@ -26,18 +26,23 @@ end
 end; end; end
 
 class Chat
-  COLORS = %w[red green blue orange]
+  COLORS = %w[red green blue orange gray]
+
+  def scheme
+    @scheme ||= `/chrome/i.exec(navigator.userAgent)` ? "wss://" : "ws://"
+  end
 
   def initialize element
     @element  = element
-    @scheme   = element.get('data-scheme')
     @messages = element.at_css('.messages')
     @message  = element.at_css('.message')
     @host     = $document.location.host
     @message_input = message.at_css('input.text')
 
+    self << {handle: :server, text: 'connecting...'}
+
     socket.on :open do |message|
-      self << {handle: 'server', text: "Welcome #{handle}!"}
+      send_message :server, "#{handle} connected"
     end
 
     socket.on :message do |message|
@@ -55,7 +60,11 @@ class Chat
     end
   end
 
-  attr_reader :element, :scheme, :messages, :message, :host, :message_input
+  def send_message handle, text
+    socket.write({handle: handle, text: text}.to_json)
+  end
+
+  attr_reader :element, :messages, :message, :host, :message_input
 
   def colors
     @colors ||= COLORS
@@ -93,7 +102,9 @@ class Chat
   end
 
   def socket
-    @socket ||= Browser::Socket.new scheme + host + '/'
+    @socket ||= Browser::Socket.new(scheme + host + '/').tap do |socket|
+      p socket.state
+    end
   end
 end
 
