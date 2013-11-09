@@ -20,12 +20,12 @@ class Opal::Server::Index
   end
 end
 
+Opal::Processor.source_map_enabled = false
 server = Opal::Server.new do |s|
   s.main = 'application'
   Dir['./assets/*'].each { |path| s.append_path path }
 end
-
-map('/assets') { run server.sprockets }
 map(server.source_maps.prefix) { run server.source_maps } if server.source_map_enabled
+map('/assets') { run server.sprockets }
 use ChatDemo::ChatBackend
 run ChatDemo::App

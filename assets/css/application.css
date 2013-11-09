@@ -1,1 +1,6 @@
-
+.posted-message { font-family: 'Monotype', 'Monaco', 'Bitstream Vera Sans MS', 'Courier New'; }
+.posted-message time { color: #ddd; margin-right: 1em;}
+.posted-message author { color: black; margin-right: 1em;}
+.posted-message author:before { content: '<'; }
+.posted-message author:after { content: '>'; }
+.posted-message .body { color: black; }
