@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/opal/opal-browser.git
+  revision: 28ead6c9b7ee8869667e3601ae7e43cdbe59b968
+  specs:
+    opal-browser (0.1.0)
+      opal (>= 0.4.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -5,6 +12,16 @@ GEM
     faye-websocket (0.7.0)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.3.0)
+    haml (4.0.3)
+      tilt
+    hike (1.2.3)
+    json (1.8.1)
+    multi_json (1.8.2)
+    opal (0.5.0)
+      source_map
+    opal-sprockets (0.3.0)
+      opal (~> 0.5.0)
+      sprockets
     puma (2.6.0)
       rack (>= 1.1, < 2.0)
     rack (1.5.2)
@@ -15,6 +32,13 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
+    source_map (3.0.1)
+      json
+    sprockets (2.10.0)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
     tilt (1.4.1)
     websocket-driver (0.3.0)
 
@@ -23,6 +47,9 @@ PLATFORMS
 
 DEPENDENCIES
   faye-websocket
+  haml
+  opal-browser!
+  opal-sprockets
   puma
   redis
   sinatra

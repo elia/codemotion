@@ -1,0 +1,27 @@
+!!!
+%html
+  %head
+    %title #codemotion Ruby Lab
+    %link(href="/assets/bootstrap.min.css" media="screen" rel="stylesheet")/
+    %link(href="/assets/application.css" media="screen" rel="stylesheet")/
+    %meta(content="width=device-width, initial-scale=1.0" name="viewport")/
+
+  %body
+    .chat-app(data-scheme=scheme class="container")
+      %header(class="page-header")
+        %h1
+          \#codemotion
+          %small
+            ruby lab chat
+          -# %form.inline-form
+          -#   %input.handle(name="handle" placeholder="Enter handle" type="text" autofocus class="form-control")
+
+      %article.messages(class="well" style="overflow: auto; min-height: 200px;")
+
+      %form.message.row
+        .col-xs-10
+          %input.text(name="text" placeholder="Enter chat text here!" type="text" autofocus class="form-control")/
+        .col-xs-2
+          %button.submit(type="submit" class="btn btn-primary" style="width:100%") Send ⏎
+
+    %script(src="assets/application.js" type="text/javascript")
