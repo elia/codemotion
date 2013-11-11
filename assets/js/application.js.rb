@@ -2,7 +2,7 @@ require 'opal'
 require 'browser'
 require 'browser/socket'
 require 'browser/storage'
-
+require 'time'
 
 # `window.onerror = function(e){console.error(e);}`
 
@@ -13,7 +13,6 @@ module Kernel
 end
 
 module Browser; module DOM; class Element < Node
-
 class Scroll
   def to(what)
     x   = what[:x] || self.x
@@ -25,8 +24,13 @@ class Scroll
     self
   end
 end
-
 end; end; end
+
+class Time
+  def to_json
+    "\"#{`self.toJSON()`}\""
+  end
+end
 
 class Chat
   COLORS = %w[red green blue orange]
@@ -35,25 +39,20 @@ class Chat
     @element  = element
     @scheme   = element.get('data-scheme')
     @messages = element.at_css('.messages')
-    @message  = element.at_css('.message')
+    @message  = element.at_css('form.message')
     @host     = $document.location.host
     @message_input = message.at_css('input.text')
 
-    socket.on :open do |message|
-      self << {handle: 'server', text: "Welcome #{handle}!"}
-    end
+    stored_messages.each {|m| display_message m}
 
-    socket.on :message do |message|
-      `console.log(#{message});`
-      data = JSON.parse(message.data);
-      `console.log(#{data});`
-      self << data
-    end
+    socket.on(:open) { |message| send_message :server, "#{handle} joined the chat." }
+
+    socket.on(:message) { |message| data = JSON.parse(message.data); self << data }
 
     message.on :submit do |event|
       event.stop!
       text = message_input.value
-      socket.write({handle: handle, text: text}.to_json)
+      send_message handle, text
       message_input.value = ''
     end
   end
@@ -66,19 +65,41 @@ class Chat
     @colors
   end
 
+  def send_message handle, text
+    socket.write({handle: handle, text: text}.to_json)
+  end
+
   def handle_color handle
     @handle_colors ||= {}
     @handle_colors[handle] ||= colors.pop
   end
 
   def << message
+    message[:time] = Time.now
+    store_message message
+    display_message message
+  end
+
+  def store_message message
+    stored_messages << message
+    storage.save
+  end
+
+  def stored_messages
+    storage[:messages] ||= []
+  end
+
+  def display_message message
     handle = message[:handle].to_s
     body   = message[:text].to_s
+    now    = message[:time]
+    p [:now, now]
+    now    = `new Date(Date.parse(now))` if String === now
     color  = handle_color(handle)
 
     DOM {
       div(class: 'posted-message') {
-        time     Time.now.strftime('[%H:%M:%S]')
+        time     now.strftime('[%H:%M:%S]'), title: now.to_s
         author   handle, style: "color: #{color}"
         span.body body
       }
@@ -100,33 +121,5 @@ class Chat
   end
 end
 
-element = $document.body.at_css('.chat-app')
-chat = Chat.new(element)
-
-
-# $("#input-form").on("submit", function(event) {
-#   event.preventDefault();
-#   var handle = $("#input-handle")[0].value;
-#   var text   = $("#input-text")[0].value;
-#   ws.send(JSON.stringify({ handle: handle, text: text }));
-#   $("#input-text")[0].value = "";
-# });
-#
-#
-# # var uri      = scheme + window.document.location.host + "/";
-# # var ws       = new WebSocket(uri);
-# # ws.onmessage = function(message) {
-# #   var data = JSON.parse(message.data);
-# #   $("#chat-text").append("<div class='panel panel-default'><div class='panel-heading'>" + data.handle + "</div><div class='panel-body'>" + data.text + "</div></div>");
-# #   $("#chat-text").stop().animate({
-# #     scrollTop: $('#chat-text')[0].scrollHeight
-# #   }, 800);
-# # };
-# #
-# # $("#input-form").on("submit", function(event) {
-# #   event.preventDefault();
-# #   var handle = $("#input-handle")[0].value;
-# #   var text   = $("#input-text")[0].value;
-# #   ws.send(JSON.stringify({ handle: handle, text: text }));
-# #   $("#input-text")[0].value = "";
-# # });
+chat_element = $document.body.at_css('.chat-app')
+$chat = Chat.new(chat_element)
