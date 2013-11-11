@@ -21,6 +21,7 @@ class Opal::Server::Index
 end
 
 Opal::Processor.source_map_enabled = false
+Opal::Processor.const_missing_enabled = false
 server = Opal::Server.new do |s|
   s.main = 'application'
   Dir['./assets/*'].each { |path| s.append_path path }

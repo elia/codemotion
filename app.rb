@@ -12,6 +12,10 @@ module ChatDemo
         render(:opal, template, options, locals, &block)
       end
 
+      def scheme
+        @scheme ||= ENV['RACK_ENV'] == 'production' ? 'wss://' : 'ws://'
+      end
+
       # def sockets
       #   settings.sockets
       # end
