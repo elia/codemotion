@@ -10,6 +10,12 @@ module ChatDemo
       @clients = []
     end
 
+    def send_all data
+      @clients.each do |client|
+        client.send(data)
+      end
+    end
+
     def call(env)
       if Faye::WebSocket.websocket?(env)
         ws = Faye::WebSocket.new(env, nil, {ping: KEEPALIVE_TIME })
