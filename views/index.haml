@@ -15,8 +15,10 @@
             ruby lab chat
           -# %form.inline-form
           -#   %input.handle(name="handle" placeholder="Enter handle" type="text" autofocus class="form-control")
-
-      %article.messages(class="well" style="overflow: auto; min-height: 200px;")
+      .row(style="margin-bottom:1em")
+        %article.messages(class="col-xs-10" style="overflow: auto; height: 300px;")
+        .col-xs-2
+          %aside.users(class="well")
 
       .row(style="margin-bottom:1em")
         %form.message
