@@ -138,8 +138,12 @@ class Chat
     @storage ||= $window.storage(:chat)
   end
 
+  def socket_url
+    scheme + host + '/'
+  end
+
   def socket
-    @socket ||= Browser::Socket.new scheme + host + '/'
+    @socket ||= Browser::Socket.new socket_url
   end
 end
 
