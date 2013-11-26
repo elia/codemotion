@@ -49,8 +49,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  faye-websocket
+  faye-websocket (~> 0.7.0)
   haml
+  opal (~> 0.5.0)
   opal-browser!
   opal-sprockets
   puma
