@@ -18,10 +18,13 @@
 
       %article.messages(class="well" style="overflow: auto; min-height: 200px;")
 
-      %form.message.row
-        .col-xs-10
-          %input.text(name="text" placeholder="Enter chat text here!" type="text" autofocus class="form-control")/
-        .col-xs-2
-          %button.submit(type="submit" class="btn btn-primary" style="width:100%") Send ⏎
+      .row(style="margin-bottom:1em")
+        %form.message
+          .col-xs-10
+            .input-group
+              %span.handle(class="input-group-addon") elia:
+              %input.text(name="text" placeholder="Enter chat text here!" type="text" autofocus class="form-control")/
+          .col-xs-2
+            %button.submit(type="submit" class="btn btn-primary" style="width:100%") Send ⏎
 
     %script(src="assets/application.js" type="text/javascript")
