@@ -26,6 +26,28 @@ class Scroll
 end
 end; end; end
 
+module Browser
+class Socket
+
+  def initialize(url, protocol = nil, &block)
+    if native?(url)
+      super(url)
+    else
+      p url
+      super(protocol ? `new window.WebSocket(#{url.to_s}, #{protocol.to_n})` :
+                       `new window.WebSocket(#{url.to_s})`)
+    end
+
+    if block.arity == 0
+      instance_exec(&block)
+    else
+      block.call(self)
+    end if block
+  end
+
+end
+end
+
 class Time
   def to_json
     "\"#{`self.toJSON()`}\""
