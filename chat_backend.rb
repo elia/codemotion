@@ -10,15 +10,9 @@ module ChatDemo
       @clients = []
     end
 
-    def send_all data
-      @clients.each do |client|
-        client.send(data)
-      end
-    end
-
     def call(env)
       if Faye::WebSocket.websocket?(env)
-        ws = Faye::WebSocket.new(env, nil, {ping: KEEPALIVE_TIME })
+        ws = Faye::WebSocket.new(env, nil, ping: KEEPALIVE_TIME)
         ws.on :open do |event|
           p [:open, ws.object_id]
           @clients << ws
@@ -26,7 +20,9 @@ module ChatDemo
 
         ws.on :message do |event|
           p [:message, event.data]
-          @clients.each {|client| client.send(event.data) }
+          @clients.each do |client|
+            client.send(event.data)
+          end
         end
 
         ws.on :close do |event|

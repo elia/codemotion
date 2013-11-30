@@ -4,8 +4,6 @@ require 'browser/socket'
 require 'browser/storage'
 require 'time'
 
-# `window.onerror = function(e){console.error(e);}`
-
 module Kernel
   def prompt message
     `window.prompt(#{message}) || nil`
@@ -22,6 +20,14 @@ class Scroll
     `#@native.scrollLeft = #{x}`
 
     self
+  end
+
+  def height
+    `#@native.scrollHeight`
+  end
+
+  def width
+    `#@native.scrollWidth`
   end
 end
 end; end; end
@@ -55,8 +61,6 @@ class Time
 end
 
 class Chat
-  COLORS = %w[red green blue orange]
-
   def initialize element
     @element  = element
     @scheme   = element.get('data-scheme')
@@ -81,19 +85,23 @@ class Chat
 
   attr_reader :element, :scheme, :messages, :message, :host, :message_input, :scheme
 
+
+  COLORS = %w[red green blue orange]
+
   def colors
     @colors ||= COLORS
     @colors = COLORS if @colors.empty?
     @colors
   end
 
-  def send_message handle, text
-    socket.write({handle: handle, text: text}.to_json)
-  end
-
   def handle_color handle
     @handle_colors ||= {}
     @handle_colors[handle] ||= colors.pop
+  end
+
+
+  def send_message handle, text
+    socket.write({handle: handle, text: text}.to_json)
   end
 
   def << message
@@ -127,7 +135,7 @@ class Chat
       }
     }.append_to(messages)
 
-    messages.scroll.to y: messages.size.height
+    messages.scroll.to y: messages.scroll.height
   end
 
   def handle
