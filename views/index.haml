@@ -16,9 +16,12 @@
           -# %form.inline-form
           -#   %input.handle(name="handle" placeholder="Enter handle" type="text" autofocus class="form-control")
       .row(style="margin-bottom:1em")
-        %article.messages(class="col-xs-10" style="overflow: auto; height: 300px;")
-        .col-xs-2
+        %article.messages(class="col-xs-6" style="overflow: auto; height: 300px;")
+        .col-xs-6
           %aside.users(class="well")
+            %textarea(style="width:100%")
+            %br
+            %input(type="submit" value="update")
 
       .row(style="margin-bottom:1em")
         %form.message
