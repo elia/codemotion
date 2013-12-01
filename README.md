@@ -1,5 +1,18 @@
-# Ruby WebSockets Chat Demo
+# Full Stack Ruby — Demo app
 
-This is a simple application that serves tasty WebSockets to your users with [faye-websocket](https://github.com/faye/faye-websocket-ruby), [Puma](https://github.com/puma/puma), and [Sinatra](https://github.com/sinatra/sinatra).
+This is a simple chat application coded in Ruby both on backend (puma/faye/sinatra) and frontend (opal/opal-browser). It has been used as a demo app to show some ruby and have fun during the codemotion milano 2013.
 
-Check out the [live demo](http://ruby-websockets-chat.herokuapp.com/) or [read the docs](https://devcenter.heroku.com/articles/ruby-websockets).
+
+
+<br>
+<br>
+**☺︎ [The app is live here](http://codemotion-ruby.herokuapp.com).**
+
+
+<br>
+<br>
+**✏︎ [The slides are available here](http://elia.schito.me/codemotion/).**
+
+<br>
+<br>
+MIT-LICENSED
